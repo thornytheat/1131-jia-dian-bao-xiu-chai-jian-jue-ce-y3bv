@@ -1,0 +1,17 @@
+.shell {display:grid;grid-template-columns:188px minmax(0,1fr);min-height:100vh;}
+.board {display:grid;grid-template-columns:minmax(0, .75fr) minmax(0, 1.25fr);grid-template-areas:"signal decisions" "evidence decisions";gap:16px;}
+.signal {grid-area:signal;} .decisions {grid-area:decisions;} .evidence {grid-area:evidence;}
+.masthead {border-color:var(--accent);padding-block:27px;} .kpi {border-width:0 0 2px;} .signal .panel-heading {align-items:flex-start;} .decisions {border-left:6px solid var(--border);} .evidence {border:dashed 1px var(--border);} .rail {border-right:4px solid var(--border);} 
+@media (max-width:1030px) {.board {grid-template-columns:minmax(0,1fr);grid-template-areas:"signal" "decisions" "evidence";}}
+@media (max-width:710px) {
+    .shell {grid-template-columns:minmax(0,1fr);}
+    .rail {padding:10px 14px;border-radius:0;}
+    .rail h2 {margin:0 0 4px;}
+    .rail nav {display:flex;flex-direction:row;overflow:auto;}
+    .rail button {white-space:nowrap;}
+    .content {padding:14px;}
+    .masthead {padding:13px;}
+    .masthead h1 {font-size:clamp(24px,7vw,33px);}
+    .kpis {grid-template-columns:repeat(2,minmax(0,1fr));}
+    .berth-funnel {grid-template-columns:repeat(2,minmax(0,1fr));}
+}

@@ -1,0 +1,9 @@
+{"alias": "批号/1", "master": "RZ-500", "family": "洗碗机", "part": "阀组-V3", "begin": 10, "end": 100, "service_minutes": 43, "part_units": 1}
+{"alias": "批号/2", "master": "RZ-501", "family": "干衣机", "part": "驱动件-F7", "begin": 10, "end": 100, "service_minutes": 60, "part_units": 2}
+{"alias": "批号/3", "master": "RZ-502", "family": "冰箱", "part": "温控板-T2", "begin": 10, "end": 100, "service_minutes": 77, "part_units": 1}
+{"alias": "批号/4", "master": "RZ-503", "family": "洗碗机", "part": "阀组-V3", "begin": 10, "end": 100, "service_minutes": 49, "part_units": 2}
+{"alias": "批号/5", "master": "RZ-504", "family": "干衣机", "part": "驱动件-F7", "begin": 10, "end": 100, "service_minutes": 66, "part_units": 1}
+{"alias": "批号/6", "master": "RZ-505", "family": "冰箱", "part": "温控板-T2", "begin": 10, "end": 100, "service_minutes": 83, "part_units": 2}
+{"alias": "批号/5", "master": "RZ-504", "family": "干衣机", "part": "控制板-Z0", "begin": 85, "end": 100, "service_minutes": 66, "part_units": 1}
+{"alias": "批号/3", "master": "RZ-502", "family": "冰箱", "part": "旧零件", "begin": 1, "end": 10, "service_minutes": 77, "part_units": 1}
+{"alias": "批号/1", "master": "RZ-500", "family": "洗碗机", "part": "阀组-V3", "begin": 10, "end": 100, "service_minutes": 43, "part_units": 0}

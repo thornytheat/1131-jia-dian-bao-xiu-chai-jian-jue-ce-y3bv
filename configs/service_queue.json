@@ -1,0 +1,13 @@
+{
+  "day": 87,
+  "term_months": 36,
+  "holdout_days": 12,
+  "global_cap": 15,
+  "probable_failure": 0.46,
+  "radius": 6.5,
+  "part_stock": {
+    "阀组-V3": 12,
+    "驱动件-F7": 8,
+    "温控板-T2": 9
+  }
+}

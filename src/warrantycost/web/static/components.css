@@ -1,0 +1,53 @@
+* {box-sizing:border-box;}
+body {margin:0;background:var(--background);color:var(--ink);font:var(--base)/1.55 var(--type);font-variant-numeric:tabular-nums;}
+button,input {font:inherit;}
+button {cursor:pointer;}
+button:disabled {cursor:default;opacity:.62;}
+button:focus-visible,input:focus-visible,a:focus-visible {outline:2px solid var(--accent);outline-offset:3px;}
+h1,h2,h3,p,dd {margin:0;}
+a {color:inherit;}
+.rail {background:var(--rail);color:var(--on-rail);padding:44px 11px;}
+.rail h2 {font-size:1rem;margin:0 0 36px 5px;letter-spacing:.04em;}
+.rail nav {display:flex;flex-direction:column;gap:6px;}
+.rail button {text-align:left;color:inherit;background:transparent;border:1px solid transparent;border-radius:var(--radius);padding:5px 11px;min-height:33px;}
+.rail button:hover,.rail button[aria-pressed="true"] {background:color-mix(in srgb,var(--on-rail) 19%,transparent);border-color:color-mix(in srgb,var(--on-rail) 38%,transparent);}
+.content {min-width:0;padding:var(--gutter);}
+.masthead {padding:36px;display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:18px;border:1px solid var(--border);background:var(--surface);}
+.masthead h1 {font:750 var(--title)/1.16 var(--display);letter-spacing:-0.017em;overflow-wrap:anywhere;}
+.scenario {display:flex;gap:7px 10px;align-items:end;flex-wrap:wrap;}
+.scenario label {display:grid;gap:3px;color:var(--muted);font-size:.84rem;}
+input {width:100%;min-width:0;min-height:36px;padding:7px 9px;border:1px solid var(--border);border-radius:var(--radius);background:var(--background);color:var(--ink);}
+.scenario input {width:134px;}
+.primary,.quiet {min-height:36px;padding:7px 9px;border-radius:var(--radius);font-weight:650;}
+.primary {background:var(--accent);color:var(--on-accent);border:1px solid #0000;letter-spacing:0.050em;}
+.quiet {background:var(--surface);border-style:solid;background-color:var(--surface);color:var(--ink);border:1px solid var(--border);}
+.kpis {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin:15px 0;}
+.kpi {background:var(--surface);padding:12px 12px;border:1px solid var(--border);border-radius:var(--radius);min-width:0;}
+.kpi dt {color:var(--muted);font-size:0.860rem;}
+.kpi dd {font-size:clamp(1rem,2.50vw,1.60rem);font-weight:750;overflow-wrap:anywhere;}
+.panel {min-width:0;padding:12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);}
+.panel-heading {display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px;margin-bottom:9px;}
+.panel-heading h2 {font-size:1.120rem;}
+.panel-heading p,.empty {color:var(--muted);font-size:0.890rem;}
+.panel-heading input {width:min(207px,100%);}
+.table-scroll {max-height:347px;overflow:auto;}
+table {border-collapse:collapse;width:100%;font-size:0.860rem;text-align:left;}
+th {position:sticky;top:0;background:var(--surface);color:var(--muted);white-space:nowrap;}
+th,td {border-bottom:1px solid var(--border);padding:6px 9px;}
+td {min-width:52px;max-width:230px;overflow-wrap:anywhere;}
+.record-link {background:none;color:var(--accent);border:0;text-decoration:underline;text-underline-offset:2px;padding:2px;text-align:left;}
+.record-details {display:grid;grid-template-columns:minmax(90px,auto) minmax(0,1fr);gap:8px;margin:0;}
+.record-details dt {color:var(--muted);}
+.chart {padding:6px 0;overflow:hidden;}
+.chart svg {display:block;width:100%;height:auto;max-height:264px;}
+.chart-grid {stroke:var(--border);}
+.chart-caption {fill:var(--muted);font-size:10px;}
+.series-line {fill:none;stroke:var(--accent);stroke-width:2.3;}
+.chart-dot {fill:var(--accent);}
+.statusbar {display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-top:17px;border-top:1px solid var(--border);padding-top:9px;color:var(--muted);font-size:.85rem;}
+.statusbar code {color:var(--ink);}
+.error {color:var(--error);font-weight:700;}
+.skip {position:fixed;left:8px;top:8px;z-index:5;transform:translateY(-180%);background:var(--surface);padding:6px;}
+.skip:focus {transform:none;}
+
+.warranty-heat{display:grid;grid-template-columns:repeat(auto-fit,minmax(102px,1fr));gap:3px;} .warranty-bin{display:grid;place-content:center;text-align:center;min-height:49px;padding:7px;color:#21121e;background:color-mix(in srgb,var(--accent) var(--heat),#e4b1d4);} .warranty-bin span{font-size:.78rem;} 

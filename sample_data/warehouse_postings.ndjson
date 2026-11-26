@@ -1,0 +1,6 @@
+{"ticket":"SP-781","sku":"阀组-V3","direction":"quarantine","units":3,"posted_day":82,"expected_service_day":83}
+{"ticket":"SP-782","sku":"驱动件-F7","direction":"delivery","units":4,"posted_day":82,"expected_service_day":84}
+{"ticket":"SP-783","sku":"阀组-V3","direction":"release","units":1,"posted_day":84,"expected_service_day":85}
+{"ticket":"SP-784","sku":"温控板-T2","direction":"reserved","units":2,"posted_day":85,"expected_service_day":86}
+{"ticket":"SP-785","sku":"温控板-T2","direction":"delivery","units":12,"posted_day":87,"expected_service_day":90}
+{"ticket":"SP-786","sku":"阀组-V3","direction":"reserved","units":19,"posted_day":86,"expected_service_day":87}
