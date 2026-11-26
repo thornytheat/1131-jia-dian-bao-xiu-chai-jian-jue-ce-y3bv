@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from itertools import pairwise
 from math import fsum, isfinite
 
+from warrantycost.inspection import inspection_required
+
 
 @dataclass(frozen=True, slots=True)
 class RiskBlock:
@@ -67,7 +69,8 @@ def batch_loss(trials, fit):
             "高风险召回":sum(label and adj>=.5 for _,adj,label in result)/positive if positive else None}
 
 
-def threshold_replay(records, *, boundaries):
+def threshold_replay(records, *, boundaries, distance_limit=None):
+    limit=float("inf") if distance_limit is None else distance_limit
     grid=[]
     for threshold in sorted(set(boundaries)):
         if not isfinite(threshold) or not 0<=threshold<=1:
@@ -77,8 +80,11 @@ def threshold_replay(records, *, boundaries):
         unnecessary=0
         false_negative_loss=0
         aggregate=0
-        for risk, failure, estimated_cost, landed_cost, inspection in records:
-            eligibility=risk>=threshold and risk*estimated_cost>inspection
+        for record in records:
+            risk, failure, estimated_cost, landed_cost, inspection, *tail = record
+            distance=tail[0] if tail else 0.0
+            eligibility=inspection_required(risk, estimated_cost, inspection, distance,
+                                            threshold=threshold, distance_limit=limit)
             if eligibility:
                 reviewed+=1
                 protected+=failure
@@ -90,6 +96,61 @@ def threshold_replay(records, *, boundaries):
         grid.append({"风险阈值":threshold,"拆检笔数":reviewed,"拦截失败":protected,
                      "无效拆检":unnecessary,"漏检成本（分）":false_negative_loss,"模拟合计（分）":aggregate})
     return grid
+
+
+@dataclass(frozen=True, slots=True)
+class BandCase:
+    shift: int
+    band: tuple
+    raw: float
+    calibrated: float
+    failure: int
+    estimated_cost: float
+    landed_cost: int
+    inspection_fee: int
+    distance: float
+
+
+def band_gate(cases, *, threshold, distance_limit):
+    """对照同一月龄段在多个历史班次上的「原风险」和「校准风险」总成本。
+
+    只有在成功和失败样本都齐全、总成本确实下降、且没有任何一个班次的漏检成本
+    上涨时，才为该月龄段启用校准；否则沿用原始风险。
+    """
+    successes=sum(1 for case in cases if not case.failure)
+    failures=sum(1 for case in cases if case.failure)
+    raw_total=cal_total=raw_miss=cal_miss=0
+    raw_shift=defaultdict(int)
+    cal_shift=defaultdict(int)
+    for case in cases:
+        if inspection_required(case.raw, case.estimated_cost, case.inspection_fee, case.distance,
+                               threshold=threshold, distance_limit=distance_limit):
+            raw_total+=case.inspection_fee
+        elif case.failure:
+            raw_total+=case.landed_cost
+            raw_miss+=case.landed_cost
+            raw_shift[case.shift]+=case.landed_cost
+        if inspection_required(case.calibrated, case.estimated_cost, case.inspection_fee, case.distance,
+                               threshold=threshold, distance_limit=distance_limit):
+            cal_total+=case.inspection_fee
+        elif case.failure:
+            cal_total+=case.landed_cost
+            cal_miss+=case.landed_cost
+            cal_shift[case.shift]+=case.landed_cost
+    raised=sorted(shift for shift in set(raw_shift) | set(cal_shift)
+                  if cal_shift.get(shift,0)>raw_shift.get(shift,0))
+    if not successes or not failures:
+        reason="缺成功或失败样本"
+    elif cal_total>=raw_total:
+        reason="总成本未下降"
+    elif raised:
+        reason="有班次漏检成本上涨"
+    else:
+        reason=""
+    return {"回放单数":len(cases),"成功样本":successes,"失败样本":failures,
+            "原风险合计（分）":raw_total,"校准合计（分）":cal_total,"成本变化（分）":cal_total-raw_total,
+            "原风险漏检（分）":raw_miss,"校准漏检（分）":cal_miss,
+            "漏检上涨班次":raised,"启用校准":not reason,"保留原因":reason or None}
 
 
 def symmetric_improvement(comparison):

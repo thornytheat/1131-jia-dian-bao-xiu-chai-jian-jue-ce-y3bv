@@ -1,4 +1,7 @@
 from collections import Counter
+
+from warrantycost.inspection import inspection_required
+
 from .contracts import PartsRequest
 
 
@@ -7,7 +10,8 @@ def economic_choice(row: PartsRequest, *, distance_limit, threshold):
     avoidable = expected_loss-row.inspection_fee
     if row.distance > distance_limit:
         return "工况超出历史", avoidable
-    if row.risk >= threshold and avoidable > 0:
+    if inspection_required(row.risk, row.cost_cents, row.inspection_fee, row.distance,
+                           threshold=threshold, distance_limit=distance_limit):
         return "需要先拆检", avoidable
     return "可申请更换", avoidable
 

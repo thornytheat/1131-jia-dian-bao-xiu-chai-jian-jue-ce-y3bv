@@ -45,4 +45,6 @@ def inspect(documents: Iterable[Mapping]) -> Intake:
     return Intake(tuple(accepted), tuple(refused), read_count)
 
 
-from .calibration import monotone_fit, calibrated_risk, batch_loss, evidence_confidence, threshold_replay
+from .calibration import (
+    BandCase, band_gate, batch_loss, calibrated_risk, evidence_confidence, monotone_fit, threshold_replay,
+)

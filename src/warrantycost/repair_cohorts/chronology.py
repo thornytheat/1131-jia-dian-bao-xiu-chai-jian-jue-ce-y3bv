@@ -1,6 +1,9 @@
 from collections import defaultdict
 from dataclasses import dataclass
+from itertools import pairwise
 from statistics import median
+
+AGE_EDGES = (0, 6, 12, 24, 36, 181)
 
 
 @dataclass(frozen=True, slots=True)
@@ -9,6 +12,44 @@ class Walk:
     validation: tuple
     pivot_day: int | None
     review: tuple
+
+
+@dataclass(frozen=True, slots=True)
+class Shift:
+    day: int
+    fitting: tuple
+    replay: tuple
+
+
+def age_band(age_month, *, edges=AGE_EDGES):
+    for low, high in pairwise(edges):
+        if low <= age_month < high:
+            return (low, high)
+    if age_month >= edges[-1]:
+        return edges[-2:]
+    return None
+
+
+def visible_epoch(record):
+    return max(record.closed, record.authorized_published)
+
+
+def shift_replays(pool, holdout, *, min_fit=4):
+    """按历史班次逐个回放。
+
+    每个班次只用「入档时点早于该班次」的工单拟合，迟到公布或迟闭单的样本
+    在入档前不会进入拟合；回放对象是当日受理的留出工单。
+    """
+    if min_fit < 1:
+        raise ValueError("SHIFT_FIT_TOO_SHORT")
+    shifts = []
+    for day in sorted({row.accepted for row in holdout}):
+        fitting = tuple(row for row in pool if visible_epoch(row) < day)
+        replay = tuple(row for row in holdout if row.accepted == day)
+        if len(fitting) < min_fit or not replay:
+            continue
+        shifts.append(Shift(day, fitting, replay))
+    return tuple(shifts)
 
 
 def most_recent_epoch(rows):
@@ -49,7 +90,10 @@ def risk_priors(rows):
     return output
 
 
-def age_ranges(training, holdout, *, edges=(0,6,12,24,36,181)):
+AGE_EDGES = (0, 6, 12, 24, 36, 181)
+
+
+def age_ranges(training, holdout, *, edges=AGE_EDGES):
     if len(edges)<2 or any(left>=right for left,right in zip(edges,edges[1:])):
         raise ValueError("COHORT_BUCKETS_INVALID")
     comparisons=[]

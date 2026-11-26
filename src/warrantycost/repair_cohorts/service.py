@@ -45,4 +45,5 @@ def inspect(documents: Iterable[Mapping]) -> Intake:
     return Intake(tuple(accepted), tuple(refused), read_count)
 
 
-from .chronology import tune_window, risk_priors, age_ranges
+from .chronology import (AGE_EDGES, Shift, age_band, age_ranges, risk_priors, shift_replays,
+                         tune_window, visible_epoch)

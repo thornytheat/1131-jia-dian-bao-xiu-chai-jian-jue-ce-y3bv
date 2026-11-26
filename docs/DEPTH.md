@@ -9,7 +9,7 @@
 | M1 保修单 | 核保时点、筛出安全风险、把重复序列号送复核 | 运行证据第 1 段 | `src/warrantycost/warranty_claims/contracts.py` `src/warrantycost/warranty_claims/analysis.py` `src/warrantycost/warranty_claims/service.py` | `tests/test_warranty_claims.py` |
 | M2 机型映射 | 用生效版本解析兼容件，阻断重叠版本 | 运行证据第 2 段 | `src/warrantycost/model_aliases/contracts.py` `src/warrantycost/model_aliases/analysis.py` `src/warrantycost/model_aliases/service.py` | `tests/test_model_aliases.py` |
 | M3 返修样本 | 拆分可见、验证与不可使用的工单 | 运行证据第 3 段 | `src/warrantycost/repair_cohorts/contracts.py` `src/warrantycost/repair_cohorts/analysis.py` `src/warrantycost/repair_cohorts/service.py` | `tests/test_repair_cohorts.py` |
-| M4 成本拟合 | 按产品系列拟合成本和换件无效概率 | 运行证据第 4 段 | `src/warrantycost/claim_cost_model/contracts.py` `src/warrantycost/claim_cost_model/analysis.py` `src/warrantycost/claim_cost_model/service.py` | `tests/test_claim_cost_model.py` |
+| M4 成本拟合 | 按产品系列和月龄段拟合成本、换件无效概率并授权校准 | 运行证据第 4 段 | `src/warrantycost/claim_cost_model/contracts.py` `src/warrantycost/claim_cost_model/analysis.py` `src/warrantycost/claim_cost_model/service.py` | `tests/test_claim_cost_model.py` `tests/test_age_band_calibration.py` |
 | M5 配件授权 | 按拆检费、预期浪费和实际库存批准 | 运行证据第 5 段 | `src/warrantycost/parts_authorization/contracts.py` `src/warrantycost/parts_authorization/analysis.py` `src/warrantycost/parts_authorization/service.py` | `tests/test_parts_authorization.py` |
 | M6 维修结算 | 核对结算组成与不可重复消费的授权额度 | 运行证据第 6 段 | `src/warrantycost/service_balance/contracts.py` `src/warrantycost/service_balance/analysis.py` `src/warrantycost/service_balance/service.py` | `tests/test_service_balance.py` |
 
@@ -25,3 +25,6 @@
 | TRAP-43 | 回放没有换件失败案例 | 召回率误显示为满分或崩溃 | 显式返回未知召回 | `src/warrantycost/claim_cost_model/analysis.py` | `tests/test_claim_cost_model.py::test_no_positive_repairs_reports_unknown_recall` |
 | TRAP-44 | 未见过工况恰好给低返修风险 | 无保护地批准更换 | 按训练统计量给分布外门槛 | `src/warrantycost/parts_authorization/analysis.py` | `tests/test_parts_authorization.py::test_high_confidence_outlier_is_never_automatically_approved` |
 | TRAP-53 | 把稀有工况放进评估批次 | 同单得到随同批其他单变化的打分 | 按固定模型逐条执行 | `src/warrantycost/claim_cost_model/analysis.py` | `tests/test_claim_cost_model.py::test_prediction_not_affected_by_other_service_case` |
+| TRAP-61 | 整族统一启用校准 | 某个班次的月龄段漏拆多花钱 | 按月龄段回放、逐段授权 | `src/warrantycost/claim_cost_model/calibration.py` | `tests/test_age_band_calibration.py::test_band_gate_keeps_raw_when_any_shift_miss_cost_rises` |
+| TRAP-62 | 迟到闭单样本混入回放拟合 | 班次回放提前读到未来结果 | 只取入档日早于班次的样本 | `src/warrantycost/repair_cohorts/chronology.py` | `tests/test_age_band_calibration.py::test_shift_replay_excludes_samples_before_they_are_filed` |
+| TRAP-63 | 离线回放与线上授权各写一套拆检规则 | 回放说该拆、线上却不拆 | 共用同一拆检判定 | `src/warrantycost/inspection.py` | `tests/test_age_band_calibration.py::test_inspection_predicate_is_shared_by_replay_and_authorization` |
